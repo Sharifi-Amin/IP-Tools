@@ -7,4 +7,4 @@ Usage: merge.py -i <inputfile> -o <outputfile>
 
 # exclude.py
 exclude  a list of single IPs or a subnets from a bigger list of subnets or single IPs
-Usage: exclude.py -e <excludelist> -f <fromlist>
+Usage: exclude.py -e \<excludelist\> -f \<fromlist\>
