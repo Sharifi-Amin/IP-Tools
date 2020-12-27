@@ -6,38 +6,40 @@ def args(argv):
    inputfile = ''
    outputfile = ''
    try:
-      opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+      opts, args = getopt.getopt(argv,"he:f:",["ifile=","ofile="])
       #print (opts,args)
    except getopt.GetoptError:
-      print ('script.py -i <inputfile> -o <outputfile>')
+      print ('exclude.py -e <excludelist> -o <fromlist>')
       sys.exit(2)
       exit()
    if opts == []:
-         print ('script.py -i <inputfile> -o <outputfile>')
+         print ('exclude.py -e <excludelist> -o <fromlist>')
          exit()
    for opt, arg in opts:
       if opt == '-h':
-         print ('script.py -i <inputfile> -o <outputfile>')
+         print ('exclude.py -e <excludelist> -o <fromlist>')
          sys.exit()
-      elif opt in ("-i", "--ifile"):
-         inputfile = arg
-      elif opt in ("-o", "--ofile"):
-         outputfile = arg
+      elif opt in ("-e", "--ifile"):
+        file2 = arg
+      elif opt in ("-f", "--ofile"):
+        file1 = arg
    #print ('Input file is ', inputfile)
    #print ('Output file is ', outputfile)
-   return (inputfile,outputfile)
+   return (file1,file2)
 
 
 #[inputfile, outputfile] = args(sys.argv[1:])
 
 
-fileName1='ranges.txt'
-with open(os.path.join(sys.path[0], fileName1), 'r') as f:
-    ranges = f.read().splitlines()
+def read_files(file1,file2):
+    fileName1 = file1
+    with open(os.path.join(sys.path[0], fileName1), 'r') as f:
+        ranges = f.read().splitlines()
 
-fileName2='remove.txt'
-with open(os.path.join(sys.path[0], fileName2), 'r') as f:
-    dup = f.read().splitlines()
+    fileName2=file2
+    with open(os.path.join(sys.path[0], fileName2), 'r') as g:
+        exclude = g.read().splitlines()
+    return (ranges,exclude)
 
 def range_to_single(ip_ranges):
     range_list = []
@@ -60,15 +62,20 @@ def remove_dup(list,item):
     return (list)
 
 
-
+[file1, file2] = args(sys.argv[1:])
+[ranges,exclude] = read_files(file1,file2)
 ip_range = range_to_single(ip_ranges=ranges)
-#print(f'range: {ip_range}')
-dup_list = range_to_single (ip_ranges=dup)
-#print(f'dups: {dup_list}')
+
+dup_list = range_to_single (ip_ranges=exclude)
+
 for item in dup_list:
     ip_range = remove_dup(ip_range,item)
-#print(ip_range)    
+    
 x = cidr_merge(ip_range)
-#print(x)
+file = open('output.txt','w') 
 for ip in x:
     print (ip)
+    file.write(f"{str(ip)}\n")
+file.close()
+
+
