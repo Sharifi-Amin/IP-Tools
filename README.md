@@ -2,7 +2,7 @@
 A collection of simple tools to merge, consolidate and mess around with CIDR subnets and IP ranges
 
 ## merge.py
-Merge diffrent subnets, ranges and single IPs into the a the smallest list of subnets possible
+Merge diffrent subnets, ranges and single IPs into the smallest list of subnets possible
 
 ```
 Usage: merge.py -i \<inputfile\> -o \<outputfile\>
